@@ -1,0 +1,8 @@
+br\com\vittaneo\dao\VooDAO.class
+br\com\vittaneo\entities\Voo.class
+br\com\vittaneo\infra\DatabaseConfig.class
+br\com\vittaneo\resource\VooResource.class
+br\com\vittaneo\exception\GlobalExceptionHandler.class
+br\com\vittaneo\dao\DestinoDAO.class
+br\com\vittaneo\resource\DestinoResource.class
+br\com\vittaneo\entities\Destino.class
