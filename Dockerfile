@@ -80,16 +80,18 @@
 # You can find more information about the UBI base runtime images and their configuration here:
 # https://rh-openjdk.github.io/redhat-openjdk-containers/
 ###
-FROM registry.access.redhat.com/ubi9/openjdk-25-runtime:1.24
+FROM eclipse-temurin:25-jdk AS build
+WORKDIR /app
+COPY . .
+RUN ./mvnw package -DskipTests
 
+FROM registry.access.redhat.com/ubi9/openjdk-25-runtime:1.24
 ENV LANGUAGE='en_US:en'
 
-
-# We make four distinct layers so if there are application changes the library layers can be re-used
-COPY --chown=185 target/quarkus-app/lib/ /deployments/lib/
-COPY --chown=185 target/quarkus-app/*.jar /deployments/
-COPY --chown=185 target/quarkus-app/app/ /deployments/app/
-COPY --chown=185 target/quarkus-app/quarkus/ /deployments/quarkus/
+COPY --chown=185 --from=build /app/target/quarkus-app/lib/ /deployments/lib/
+COPY --chown=185 --from=build /app/target/quarkus-app/*.jar /deployments/
+COPY --chown=185 --from=build /app/target/quarkus-app/app/ /deployments/app/
+COPY --chown=185 --from=build /app/target/quarkus-app/quarkus/ /deployments/quarkus/
 
 EXPOSE 8080
 USER 185
@@ -97,4 +99,3 @@ ENV JAVA_OPTS_APPEND="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=or
 ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
 
 ENTRYPOINT [ "/opt/jboss/container/java/run/run-java.sh" ]
-
