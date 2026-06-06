@@ -83,6 +83,7 @@
 FROM eclipse-temurin:25-jdk AS build
 WORKDIR /app
 COPY . .
+RUN chmod +x mvnw
 RUN ./mvnw package -DskipTests
 
 FROM registry.access.redhat.com/ubi9/openjdk-25-runtime:1.24
