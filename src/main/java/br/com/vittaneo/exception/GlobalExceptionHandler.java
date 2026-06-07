@@ -9,9 +9,8 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
 
     @Override
     public Response toResponse(Exception e) {
-        return Response
-                .status(500)
-                .entity("{\"erro\": \"" + e.getMessage() + "\"}")
+        return Response.status(500)
+                .entity(new ErrorResponse("Erro interno: " + e.getMessage()))
                 .build();
     }
 }
