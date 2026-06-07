@@ -80,11 +80,11 @@
 # You can find more information about the UBI base runtime images and their configuration here:
 # https://rh-openjdk.github.io/redhat-openjdk-containers/
 ###
-FROM eclipse-temurin:25-jdk AS build
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
-COPY . .
-RUN chmod +x mvnw
-RUN ./mvnw package -DskipTests
+COPY pom.xml .
+COPY src ./src
+RUN mvn package -DskipTests
 
 FROM registry.access.redhat.com/ubi9/openjdk-25-runtime:1.24
 ENV LANGUAGE='en_US:en'
